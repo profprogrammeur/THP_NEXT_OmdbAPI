@@ -1,5 +1,5 @@
 // const apikey='';
-const apikey = window.prompt("Entre ta clé d'API ici")
+const apikey = window.prompt("Entre ta clé d'API OMDb ici")
 const result = document.getElementById('result');
 let userquery = document.getElementById('searchbar');
 
