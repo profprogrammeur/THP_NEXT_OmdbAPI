@@ -24,6 +24,8 @@ const loadFilmList = (url) => {
 			response.json().then(data => {
 				if (data.Response == "True") {
 					data.Search.forEach(film => showFilmList(result, film.Title, film.imdbID, film.Poster, film.Year));
+          lazyTargets = document.querySelectorAll('.card');
+          lazyTargets.forEach(lazyLoad);
 				}
 				if (data.Response == "False") {
 					result.innerHTML = `No film listed`
@@ -31,11 +33,27 @@ const loadFilmList = (url) => {
 			}));
 }
 
+function lazyLoad(target) {
+  const obs = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.classList.remove('fadeOut');
+        img.classList.add('fadeIn');
+        
+        observer.disconnect();
+      }
+    });
+  });
+  obs.observe(target);
+}
+
+
 const showFilmList = (selector, name, id, poster, year) => {
   if(poster=='N/A')poster='./images/placeholder.jpg';
 	selector.innerHTML += `
   <div class="col">
-    <div class="card">
+    <div class="card fadeOut">
       <img src="${poster}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">${name}</h5>
@@ -45,6 +63,7 @@ const showFilmList = (selector, name, id, poster, year) => {
     </div>
   </div>
     `
+ 
 }
 
 const emptyFilmList = () => {
